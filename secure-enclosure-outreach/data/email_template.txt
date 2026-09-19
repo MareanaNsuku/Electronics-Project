@@ -4,7 +4,9 @@ Dear {contact_person},
 
 I'm {from_name} from Q-TECH MECHATRONICS. We're developing a secure remote-control enclosure system for a mill crane project, MEA-06434.
 
-We're looking for electronics warehouse or prototyping space where we can build and test the prototype before final PCB manufacture. This is a low-voltage control prototype; AC mains work will be handled by qualified personnel.
+We are looking for a space to work on this project — a workshop, warehouse, or prototyping area where we can assemble and test the prototype before final PCB manufacture. If you can provide a space, it would be greatly appreciated.
+
+This is a low-voltage control prototype; AC mains work will be handled by qualified personnel.
 
 The prototype involves:
 - ESP32 + PN532 RFID access control
@@ -41,4 +43,5 @@ Best regards,
 Q-TECH MECHATRONICS
 Email: {from_email}
 Phone: {from_phone}
+LinkedIn: {linkedin_url}
 GitHub: {github_repo}

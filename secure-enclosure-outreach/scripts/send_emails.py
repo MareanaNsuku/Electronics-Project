@@ -39,6 +39,7 @@ for row in rows:
         from_email=config['from_email'],
         from_phone=config.get('from_phone', ''),
         github_repo=config.get('github_repo', ''),
+        linkedin_url=config.get('linkedin_url', ''),
         duration_weeks=config.get('duration_weeks', ''),
         start_date=config.get('start_date', ''),
     )
