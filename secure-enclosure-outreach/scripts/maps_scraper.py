@@ -12,7 +12,7 @@ def load_config():
 def extract_place_urls(page, max_urls=12):
     """Collect unique /maps/place/ URLs from the current search page."""
     try:
-        page.wait_for_selector('a[href*="/maps/place/"]', timeout=15000)
+        page.wait_for_selector('a[href*="/maps/place/"]', timeout=8000)
     except:
         return []
     links = page.eval_on_selector_all(
@@ -38,12 +38,12 @@ def extract_place_details(page, url):
     d = {"name": "", "website": "", "phone": "", "address": ""}
     try:
         page.goto(url, timeout=30000, wait_until="domcontentloaded")
-        page.wait_for_timeout(2500)
+        page.wait_for_timeout(800)
     except Exception as e:
         return d
     # Name
     try:
-        d["name"] = page.locator('h1').first.inner_text(timeout=4000).strip()
+        d["name"] = page.locator('h1').first.inner_text(timeout=1200).strip()
     except:
         pass
     # Website (multiple selector fallbacks)
@@ -53,7 +53,7 @@ def extract_place_details(page, url):
         'a[data-tooltip="Open website"]',
     ]:
         try:
-            href = page.locator(sel).first.get_attribute('href', timeout=2500)
+            href = page.locator(sel).first.get_attribute('href', timeout=800)
             if href:
                 d["website"] = href
                 break
@@ -65,7 +65,7 @@ def extract_place_details(page, url):
         'button[aria-label^="Phone:"]',
     ]:
         try:
-            aria = page.locator(sel).first.get_attribute('aria-label', timeout=2000)
+            aria = page.locator(sel).first.get_attribute('aria-label', timeout=800)
             if aria:
                 d["phone"] = re.sub(r'^Phone:\s*', '', aria).strip()
                 break
@@ -77,7 +77,7 @@ def extract_place_details(page, url):
         'button[aria-label^="Address:"]',
     ]:
         try:
-            aria = page.locator(sel).first.get_attribute('aria-label', timeout=2000)
+            aria = page.locator(sel).first.get_attribute('aria-label', timeout=800)
             if aria:
                 d["address"] = re.sub(r'^Address:\s*', '', aria).strip()
                 break
@@ -112,17 +112,17 @@ def main():
                 try:
                     search_page.goto(url, timeout=30000, wait_until="domcontentloaded")
                     search_page.wait_for_timeout(4000)
-                    place_urls = extract_place_urls(search_page, max_urls=10)
+                    place_urls = extract_place_urls(search_page, max_urls=6)
                     print(f"        → {len(place_urls)} place URLs")
                     for pu in place_urls:
                         d = extract_place_details(detail_page, pu)
                         if d["name"]:
                             all_places.append(d)
                             print(f"           • {d['name']}  {d['website']}")
-                        time.sleep(random.uniform(1.0, 2.0))
+                        time.sleep(random.uniform(0.5, 1.0))
                 except Exception as e:
                     print(f"        ❌ {e}")
-                time.sleep(random.uniform(3, 6))
+                time.sleep(random.uniform(1, 2))
         browser.close()
 
     # Deduplicate by name (fallback by website)
