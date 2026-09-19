@@ -2,5 +2,6 @@ venv/
 __pycache__/
 *.pyc
 config.yaml
-logs/
 .env
+logs/
+data/master_companies.csv.bak

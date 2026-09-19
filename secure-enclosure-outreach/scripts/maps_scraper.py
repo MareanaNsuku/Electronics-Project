@@ -5,7 +5,8 @@ from playwright.sync_api import sync_playwright
 import yaml
 
 def load_config():
-    with open('config.yaml') as f:
+    path = 'config.yaml' if os.path.exists('config.yaml') else 'config.example.yaml'
+    with open(path) as f:
         return yaml.safe_load(f)
 
 def extract_place_urls(page, max_urls=12):

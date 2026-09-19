@@ -1,0 +1,24 @@
+# Non-secret config for MEA-06434 outreach.
+# Local overrides (SMTP creds etc.) go in config.yaml (gitignored).
+# SMTP_PASS must be set as an environment variable.
+
+smtp_server: smtp.gmail.com
+smtp_port: 587
+smtp_user: mareanansuku@gmail.com
+from_email: mareanansuku@gmail.com
+from_name: Nsuku Mareana
+from_title: Hardware Engineer
+from_phone: "068 078 9360"
+github_repo: https://github.com/MareanaNsuku/Electronics-Project
+duration_weeks: 4
+start_date: 2026-10-01
+cities:
+  - Johannesburg
+  - Cape Town
+  - Pretoria
+queries:
+  - electronics manufacturing company
+  - PCB assembly company
+  - automation company
+  - industrial control systems
+  - electrical engineering firm
