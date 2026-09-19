@@ -1,0 +1,30 @@
+# Afternoon run config — 14:00 SAST (12:00 UTC)
+smtp_server: smtp.gmail.com
+smtp_port: 587
+smtp_user: mareanansuku@gmail.com
+from_email: mareanansuku@gmail.com
+from_name: Nsuku Mareana
+from_title: Hardware Engineer
+from_phone: "068 078 9360"
+linkedin_url: www.linkedin.com/in/nsukumareana
+github_repo: https://github.com/MareanaNsuku/Electronics-Project
+duration_weeks: 4
+start_date: 2026-10-01
+
+cities:
+  - East London
+  - Bloemfontein
+  - Polokwane
+  - Nelspruit
+  - Kimberley
+  - Rustenburg
+
+queries:
+  - switchgear supplier
+  - instrumentation company
+  - sensor manufacturer
+  - robotics company
+  - PLC supplier
+  - SCADA systems integrator
+  - electrical panel builder
+  - industrial electrical contractor

@@ -5,7 +5,9 @@ from playwright.sync_api import sync_playwright
 import yaml
 
 def load_config():
-    path = 'config.yaml' if os.path.exists('config.yaml') else 'config.example.yaml'
+    path = os.environ.get('CONFIG_FILE')
+    if not path or not os.path.exists(path):
+        path = 'config.yaml' if os.path.exists('config.yaml') else 'config.example.yaml'
     with open(path) as f:
         return yaml.safe_load(f)
 
@@ -112,7 +114,7 @@ def main():
                 try:
                     search_page.goto(url, timeout=30000, wait_until="domcontentloaded")
                     search_page.wait_for_timeout(4000)
-                    place_urls = extract_place_urls(search_page, max_urls=6)
+                    place_urls = extract_place_urls(search_page, max_urls=4)
                     print(f"        → {len(place_urls)} place URLs")
                     for pu in place_urls:
                         d = extract_place_details(detail_page, pu)

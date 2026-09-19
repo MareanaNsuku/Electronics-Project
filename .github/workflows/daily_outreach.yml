@@ -2,16 +2,16 @@ name: Daily MEA-06434 Outreach
 
 on:
   schedule:
-    # 06:00 UTC = 08:00 SAST
+    # 06:00 UTC = 08:00 SAST → config.a.yaml
     - cron: '0 6 * * *'
-    # 12:00 UTC = 14:00 SAST
+    # 12:00 UTC = 14:00 SAST → config.b.yaml
     - cron: '0 12 * * *'
   workflow_dispatch:
 
 jobs:
   outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 90
     permissions:
       contents: write
     steps:
@@ -32,11 +32,24 @@ jobs:
         working-directory: secure-enclosure-outreach
         run: playwright install --with-deps chromium
 
+      - name: Pick config by time of day
+        run: |
+          HOUR=$(date -u +%H)
+          if [ "$HOUR" -lt 9 ]; then
+            echo "CONFIG_FILE=config.a.yaml" >> $GITHUB_ENV
+            echo "Using morning config (config.a.yaml)"
+          else
+            echo "CONFIG_FILE=config.b.yaml" >> $GITHUB_ENV
+            echo "Using afternoon config (config.b.yaml)"
+          fi
+
       - name: Run pipeline
         working-directory: secure-enclosure-outreach
         env:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          CONFIG_FILE: ${{ env.CONFIG_FILE }}
         run: |
+          echo "Using config: $CONFIG_FILE"
           python -u scripts/maps_scraper.py
           python -u scripts/harvest_emails.py
           python -u scripts/send_emails.py

@@ -5,7 +5,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 
-CONFIG_PATH = 'config.yaml' if os.path.exists('config.yaml') else 'config.example.yaml'
+CONFIG_PATH = os.environ.get('CONFIG_FILE') or ('config.yaml' if os.path.exists('config.yaml') else 'config.example.yaml')
+if not os.path.exists(CONFIG_PATH):
+    CONFIG_PATH = 'config.yaml' if os.path.exists('config.yaml') else 'config.example.yaml'
 with open(CONFIG_PATH) as f:
     config = yaml.safe_load(f)
 
