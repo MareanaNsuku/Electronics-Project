@@ -22,7 +22,10 @@ with open('data/master_companies.csv', 'r') as f:
 
 sent_count = 0
 for row in rows:
-    if row.get('Status') == 'sent':
+    status = (row.get('Status') or '').strip().lower()
+    if status == 'sent':
+        continue
+    if status.startswith('error'):
         continue
     emails_raw = row.get('Emails Found', '').strip()
     if not emails_raw:

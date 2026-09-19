@@ -125,7 +125,7 @@ def main():
                 time.sleep(random.uniform(1, 2))
         browser.close()
 
-    # Deduplicate by name (fallback by website)
+    # Deduplicate within this run
     seen, unique = set(), []
     for r in all_places:
         key = (r["name"].lower().strip(), r["website"].lower().strip())
@@ -134,14 +134,53 @@ def main():
         seen.add(key)
         unique.append(r)
 
-    os.makedirs('data', exist_ok=True)
-    with open('data/master_companies.csv', 'w', newline='', encoding='utf-8') as f:
-        w = csv.writer(f)
-        w.writerow(['Company Name', 'Website', 'Phone', 'Address', 'Emails Found', 'Status'])
-        for r in unique:
-            w.writerow([r['name'], r['website'], r['phone'], r['address'], '', ''])
+    # Load existing CSV (if any) and build the "already known" set
+    existing_rows = []
+    known_keys = set()
+    csv_path = 'data/master_companies.csv'
+    if os.path.exists(csv_path):
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                existing_rows.append(row)
+                name = (row.get('Company Name') or '').lower().strip()
+                site = (row.get('Website') or '').lower().strip()
+                known_keys.add((name, site))
+                known_keys.add((name, ''))  # match by name alone too
 
-    print(f"\n✅ Saved {len(unique)} unique companies to data/master_companies.csv")
+    # Only add genuinely new companies
+    new_rows = []
+    for r in unique:
+        key = (r['name'].lower().strip(), r['website'].lower().strip())
+        name_only = (r['name'].lower().strip(), '')
+        if key in known_keys or name_only in known_keys:
+            continue
+        new_rows.append(r)
+        known_keys.add(key)
+        known_keys.add(name_only)
+
+    # Merge: existing (with their status preserved) + new ones
+    all_rows = existing_rows + [
+        {
+            'Company Name': r['name'],
+            'Website': r['website'],
+            'Phone': r['phone'],
+            'Address': r['address'],
+            'Emails Found': '',
+            'Status': '',
+        }
+        for r in new_rows
+    ]
+
+    os.makedirs('data', exist_ok=True)
+    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+        w = csv.DictWriter(f, fieldnames=[
+            'Company Name', 'Website', 'Phone', 'Address', 'Emails Found', 'Status'
+        ])
+        w.writeheader()
+        w.writerows(all_rows)
+
+    print(f"\n✅ {len(new_rows)} new companies added; {len(existing_rows)} preserved (total {len(all_rows)})")
 
 if __name__ == '__main__':
     main()
