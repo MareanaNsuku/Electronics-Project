@@ -37,9 +37,9 @@ jobs:
         env:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
         run: |
-          python scripts/maps_scraper.py
-          python scripts/harvest_emails.py
-          python scripts/send_emails.py
+          python -u scripts/maps_scraper.py
+          python -u scripts/harvest_emails.py
+          python -u scripts/send_emails.py
 
       - name: Commit updated CSV
         run: |
