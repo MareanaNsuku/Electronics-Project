@@ -1,19 +1,31 @@
+# Non-secret config for MEA-06434 outreach.
+# Local overrides go in config.yaml (gitignored).
+# SMTP_PASS must be set as an environment variable on GitHub.
+
 smtp_server: smtp.gmail.com
 smtp_port: 587
 smtp_user: mareanansuku@gmail.com
 from_email: mareanansuku@gmail.com
 from_name: Nsuku Mareana
 from_title: Hardware Engineer
-from_phone: 068 078 9360
+from_phone: "068 078 9360"
+linkedin_url: www.linkedin.com/in/nsukumareana
 github_repo: https://github.com/MareanaNsuku/Electronics-Project
 duration_weeks: 4
 start_date: 2026-10-01
+
+# Expanded scope: 5 SA industrial hubs × 6 targeted queries = 30 searches/run
+# Runtime: ~25-30 min/run × 2 runs/day = ~1,680 min/month (under 2,000 limit)
 cities:
-- Johannesburg
-- Pretoria
+  - Johannesburg
+  - Pretoria
+  - Cape Town
+  - Durban
+  - Port Elizabeth
 queries:
-- electronics manufacturing company
-- PCB assembly company
-- automation company
-- electrical engineering firm
-linkedin_url: www.linkedin.com/in/nsukumareana
+  - electronics manufacturing company
+  - PCB assembly company
+  - industrial automation company
+  - industrial control systems
+  - electrical engineering firm
+  - control panel manufacturer
