@@ -1,10 +1,10 @@
-Subject: Request for Electronics Warehouse Space – MEA-06434 Secure Remote Control Enclosure
+Subject: Request for Electronics Warehouse/Prototyping Space – MEA-06434
 
 Dear {contact_person},
 
-I’m {from_name} from Q-TECH MECHATRONICS. We’re developing a secure remote-control enclosure system for a mill crane project, MEA-06434.
+I'm {from_name} from Q-TECH MECHATRONICS. We're developing a secure remote-control enclosure system for a mill crane project, MEA-06434.
 
-We’re looking for electronics warehouse or prototyping space where we can build and test the prototype before final PCB manufacture. This is a low-voltage control prototype; AC mains work will be handled by qualified personnel.
+We're looking for electronics warehouse or prototyping space where we can build and test the prototype before final PCB manufacture. This is a low-voltage control prototype; AC mains work will be handled by qualified personnel.
 
 The prototype involves:
 - ESP32 + PN532 RFID access control
@@ -26,14 +26,14 @@ We need access to:
 
 Duration: Approximately {duration_weeks} weeks, starting {start_date}.
 
-We’re open to paying membership fees, hourly rates, or discussing a partnership. We can supply our own tools and materials where possible, and we’re happy to sign an NDA before sharing detailed documentation.
+We're open to paying membership fees, hourly rates, or discussing a partnership. We can supply our own tools and materials where possible, and we're happy to sign an NDA before sharing detailed documentation.
 
 Could you please let us know:
 1. Whether you have available space and equipment?
 2. Any requirements, costs, or onboarding steps?
 3. Who we should speak to next?
 
-Thank you for your time. We’d be glad to provide a one-page project brief or arrange a call.
+Thank you for your time. We'd be glad to provide a one-page project brief or arrange a call.
 
 Best regards,
 {from_name}

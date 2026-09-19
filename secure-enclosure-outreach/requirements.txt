@@ -1,1 +1,6 @@
 PyYAML
+playwright
+pandas
+requests
+beautifulsoup4
+dnspython
