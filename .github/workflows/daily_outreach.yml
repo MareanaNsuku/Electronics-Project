@@ -2,15 +2,20 @@ name: Daily MEA-06434 Outreach
 
 on:
   schedule:
-    # 06:00 UTC = 08:00 SAST → config.a.yaml
-    - cron: '0 6 * * *'
-    # 12:00 UTC = 14:00 SAST → config.b.yaml
-    - cron: '0 12 * * *'
+    - cron: '0 6 * * *'    # 08:00 SAST — morning config
+    - cron: '0 12 * * *'   # 14:00 SAST — afternoon config
   workflow_dispatch:
+
+# Prevent duplicate runs from cancelling each other
+concurrency:
+  group: outreach-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   outreach:
-    runs-on: ubuntu-latest
+    # Pin to Ubuntu 24.04 — skip the Ubuntu 26 migration entirely
+    runs-on: ubuntu-24.04
+    # Fail fast if runner can't be acquired (prevents 2h+ hangs)
     timeout-minutes: 90
     permissions:
       contents: write
@@ -37,24 +42,21 @@ jobs:
           HOUR=$(date -u +%H)
           if [ "$HOUR" -lt 9 ]; then
             echo "CONFIG_FILE=config.a.yaml" >> $GITHUB_ENV
-            echo "Using morning config (config.a.yaml)"
           else
             echo "CONFIG_FILE=config.b.yaml" >> $GITHUB_ENV
-            echo "Using afternoon config (config.b.yaml)"
           fi
 
       - name: Run pipeline
         working-directory: secure-enclosure-outreach
         env:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          CONFIG_FILE: ${{ env.CONFIG_FILE }}
         run: |
-          echo "Using config: $CONFIG_FILE"
           python -u scripts/maps_scraper.py
           python -u scripts/harvest_emails.py
           python -u scripts/send_emails.py
 
       - name: Commit updated CSV
+        if: always()
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"

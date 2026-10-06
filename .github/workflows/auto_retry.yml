@@ -1,0 +1,43 @@
+name: Auto-retry cancelled outreach
+
+on:
+  workflow_run:
+    workflows: ["Daily MEA-06434 Outreach"]
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  retry:
+    # Only retry if the original run was cancelled or failed
+    if: >
+      github.event.workflow_run.conclusion == 'cancelled' ||
+      github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check if this is a retry attempt
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          ATTEMPT=$(gh api "repos/${{ github.repository }}/actions/runs/${RUN_ID}" --jq '.run_attempt')
+          echo "attempt=$ATTEMPT" >> $GITHUB_OUTPUT
+          if [ "$ATTEMPT" -ge 2 ]; then
+            echo "Already retried once — skipping to avoid infinite loop"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Re-run failed/cancelled jobs
+        if: steps.check.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          echo "Re-running failed jobs for run $RUN_ID"
+          gh api -X POST "repos/${{ github.repository }}/actions/runs/${RUN_ID}/rerun-failed-jobs" || true
